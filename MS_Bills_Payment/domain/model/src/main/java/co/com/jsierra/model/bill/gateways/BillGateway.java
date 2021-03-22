@@ -5,7 +5,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface BillGateway {
-    Flux<Bill> getAllBillsAvailable();
-
+    Flux<Bill> getAllBills();
     Mono<Bill> getBillById();
 }
