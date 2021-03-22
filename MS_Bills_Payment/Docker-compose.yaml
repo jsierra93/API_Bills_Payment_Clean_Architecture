@@ -1,0 +1,63 @@
+version: "3.7"
+services:
+  mysql-bills:
+    image: mysql:latest
+    container_name: 'mysql-bills'
+    volumes:
+      - "./.mysql-data/db:/var/lib/mysql"
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: dev1234
+      MYSQL_DATABASE: bills_db
+      MYSQL_USER: dev1234
+      MYSQL_PASSWORD: dev1234
+
+  postgres-payment:
+    image: postgres:13.2-alpine
+    container_name: 'postgres-payment'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: payments_db
+      POSTGRES_USER: dev1234
+      POSTGRES_PASSWORD: dev1234
+
+  redis-cost:
+    image: redis
+    container_name: 'redis-cost'
+    ports:
+      - "6379:6379"
+
+  rabbitmq-logs:
+    image: rabbitmq:3-management
+    container_name: 'rabbitmq-logs'
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ./enabled_plugins:/etc/rabbitmq/enabled_plugins
+      - ./.docker/rabbitmq/logs/:/var/log/rabbitmq/
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_USER: "dev1234"
+      RABBITMQ_DEFAULT_PASS: "dev1234"
+      RABBITMQ_DEFAULT_VHOST: "/"
+
+  adminer: #GUI web para acceder a la base de datos: localhost:8080
+    image: adminer
+    restart: always
+    depends_on:
+      - postgres-payment
+      - mysql-bills
+    links:
+      - postgres-payment:5432
+      - mysql-bills:3306
+    ports:
+      - 8080:8080
+volumes:
+  postgres-data:
+    external: false

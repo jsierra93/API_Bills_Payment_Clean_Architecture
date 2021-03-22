@@ -12,6 +12,7 @@ management:
       show-details: always
   profiles:
     include:
+
 logging:
   level:
     org:

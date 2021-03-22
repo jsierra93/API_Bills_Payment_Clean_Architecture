@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class Handler {
 
-    private  final BillspaymentUseCase billspaymentUseCase;
+   // private  final BillspaymentUseCase billspaymentUseCase;
 
     public Mono<ServerResponse> getBills(ServerRequest serverRequest) {
         // usecase.logic();
