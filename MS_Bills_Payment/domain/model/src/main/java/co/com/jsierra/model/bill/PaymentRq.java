@@ -9,6 +9,7 @@ import java.util.UUID;
 @Data
 @Builder(toBuilder = true)
 public class PaymentRq {
+  //  @Id
     private UUID tracker;
     private String numBill;
     private Date datePayment;

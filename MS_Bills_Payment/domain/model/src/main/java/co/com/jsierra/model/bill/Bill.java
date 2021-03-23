@@ -15,5 +15,5 @@ public class Bill {
     private String codProveedor;
     private String codClient;
     private BigDecimal cost;
-    private boolean state;
+    private boolean active;
 }

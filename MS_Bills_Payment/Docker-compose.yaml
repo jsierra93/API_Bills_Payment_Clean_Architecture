@@ -1,13 +1,13 @@
-version: "3.7"
+version: "3.9"
 services:
   mysql-bills:
     image: mysql:latest
     container_name: 'mysql-bills'
     volumes:
-      - "./.mysql-data/db:/var/lib/mysql"
+      - mysql-data:/var/lib/mysql
     restart: always
     ports:
-      - 3306:3306
+      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: dev1234
       MYSQL_DATABASE: bills_db
@@ -20,7 +20,7 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - "5432:5432"
     environment:
       POSTGRES_DB: payments_db
       POSTGRES_USER: dev1234
@@ -32,15 +32,15 @@ services:
     ports:
       - "6379:6379"
 
-  rabbitmq-logs:
+  rabbitmq-logs: # Ingresar por localhost:15672 al administrador de rabbitmq
     image: rabbitmq:3-management
     container_name: 'rabbitmq-logs'
     ports:
-      - 5672:5672
-      - 15672:15672
+      - "5672:5672"
+      - "15672:15672"
     volumes:
       - ./enabled_plugins:/etc/rabbitmq/enabled_plugins
-      - ./.docker/rabbitmq/logs/:/var/log/rabbitmq/
+      - rabbitmq-data:/var/log/rabbitmq/
     environment:
       RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
       RABBITMQ_DEFAULT_USER: "dev1234"
@@ -57,7 +57,12 @@ services:
       - postgres-payment:5432
       - mysql-bills:3306
     ports:
-      - 8080:8080
+      - "8080:8080"
+
 volumes:
   postgres-data:
+    external: false
+  mysql-data:
+    external: false
+  rabbitmq-data:
     external: false
